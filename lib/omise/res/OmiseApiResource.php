@@ -56,6 +56,19 @@ class OmiseApiResource extends OmiseObject
         return $resource;
     }
 
+    protected static function g_list($clazz, $url, $options, $publickey = null, $secretkey = null)
+    {
+        if (is_array($options)) {
+            $options = '?' . http_build_query($options);
+        }
+
+        $resource = call_user_func(array($clazz, 'getInstance'), $clazz, $publickey, $secretkey);
+        $result   = $resource->execute($url . $options, self::REQUEST_GET, $resource->getResourceKey());
+        $resource->refresh($result);
+
+        return $resource;
+    }
+
     /**
      * Creates the resource with given parameters in an associative array.
      *
